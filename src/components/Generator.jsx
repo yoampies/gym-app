@@ -25,6 +25,22 @@ export default function Generator() {
         setShowModal(!showModal)
     }
 
+    function updateMuscles (muscleGroup) {
+        if (muscles.length > 2) {
+            return
+        }
+        if (type !== "individual") {
+            setMuscles([muscleGroup])
+            return
+        }
+        if (muscles.includes(muscleGroup)) {
+            setMuscles(muscles.filter(val => val !== muscleGroup))
+            return
+        }
+
+        setMuscles([...muscles, muscleGroup])
+    } 
+
     return (
         <SectionWrapper header={"crea tu entrenamiento"} title={["Es", "hora", "de", "ponerse", "grande"]}>
             <Header index={"01"} title={"Entrenamiento"} description={"¿Cómo quién quieres entrenar?"}/>
@@ -48,8 +64,13 @@ export default function Generator() {
                 {showModal && (
                     <div className="flex flex-col px-3 pb-3">
                         {
-                            (workout === "individual" ? WORKOUTS[workout] : Object.keys(WORKOUTS[workout])).map((workout, workoutIndex) => {})
-                            //2:33:20
+                            (type === "individual" ? WORKOUTS[type] : Object.keys(WORKOUTS[type])).map((muscleGroup, muscleGroupIndex) => {
+                                return (
+                                    <button className={"hover:text-blue-400 duration-200"  + (muscles.includes(muscleGroup) ? " text-blue-400" : "")} key={muscleGroupIndex} onClick={() => {updateMuscles(muscleGroup)}}>
+                                        <p className="capitalize">{muscleGroup.replaceAll("_", " ")}</p>
+                                    </button>
+                                )
+                            })
                         }
                     </div>
                 )}
